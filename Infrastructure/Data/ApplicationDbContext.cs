@@ -1,28 +1,43 @@
+using Application.Common.Interfaces;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+namespace Infrastructure.Data;
 
-namespace Infrastructure.Data
+public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
-    public class ApplicationDbContext : DbContext
-    {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
-        {
-        }
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        : base(options) { }
 
-        // Add your DbSets here
-        // Example: public DbSet<YourEntity> YourEntities { get; set; }
+    public DbSet<Candidate> Candidates { get; set; }
+    public DbSet<Job> Jobs { get; set; }
+    public DbSet<Requisition> Requisitions { get; set; }
+    public DbSet<User> Users { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
+    public DbSet<Interview> Interviews { get; set; }
 
-            // Configure your entities here
-            // Example:
-            // modelBuilder.Entity<YourEntity>(entity =>
-            // {
-            //     entity.HasKey(e => e.Id);
-            //     entity.Property(e => e.Name).IsRequired().HasMaxLength(200);
-            // });
-        }
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public DbSet<JobApplication> JobApplications { get; set; }
+    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+        => await base.SaveChangesAsync(cancellationToken);
 }
