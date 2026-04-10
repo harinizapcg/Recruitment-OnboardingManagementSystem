@@ -1,9 +1,10 @@
-﻿namespace Domain.Entities
+﻿using MediatR;
+
+namespace Application.Roles.Commands
 {
-    public class Role : BaseEntity
+    public class CreateRoleCommand : IRequest<int>
     {
         public string RoleName { get; set; } = string.Empty;
         public string RoleDescription { get; set; } = string.Empty;
-        public ICollection<User> Users { get; set; } = new List<User>();
     }
 }

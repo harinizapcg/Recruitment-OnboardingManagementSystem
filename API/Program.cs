@@ -1,5 +1,7 @@
 using Application;
+using Domain.Interfaces;
 using Infrastructure;
+using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -11,16 +13,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
-// ✅ Read JWT settings safely
+// ✅ Read JWT settings
 var jwtKey = builder.Configuration["Jwt:Key"];
 var jwtIssuer = builder.Configuration["Jwt:Issuer"];
 var jwtAudience = builder.Configuration["Jwt:Audience"];
 
-// 🔥 Prevent NULL crash (your original error)
 if (string.IsNullOrEmpty(jwtKey))
-{
     throw new Exception("JWT Key is missing in appsettings.json");
-}
 
 // ✅ Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -32,12 +31,23 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-
             ValidIssuer = jwtIssuer,
             ValidAudience = jwtAudience,
-
             IssuerSigningKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(jwtKey))
+        };
+
+        // ✅ Custom 401 response
+        options.Events = new JwtBearerEvents
+        {
+            OnChallenge = async context =>
+            {
+                context.HandleResponse();
+                context.Response.StatusCode = 401;
+                context.Response.ContentType = "application/json";
+                await context.Response.WriteAsync(
+                    "{\"message\": \"Unauthorized access detected. Please provide a valid token.\"}");
+            }
         };
     });
 
@@ -46,6 +56,11 @@ builder.Services.AddAuthorization();
 
 // ✅ Controllers
 builder.Services.AddControllers();
+
+// ✅ Repositories
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<ICandidateRepository, CandidateRepository>();
 
 // ✅ Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -57,15 +72,14 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1"
     });
 
-    // 🔐 JWT Swagger Support
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
-        Type = SecuritySchemeType.Http,   // ✅ FIXED (was ApiKey before)
+        Type = SecuritySchemeType.Http,
         Scheme = "bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Enter: Bearer {your token}"
+        Description = "Enter your JWT token here"
     });
 
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -103,12 +117,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowAll");
-
 app.UseHttpsRedirection();
-
-app.UseAuthentication(); // 🔥 MUST come before Authorization
+app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

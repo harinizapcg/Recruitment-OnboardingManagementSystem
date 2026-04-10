@@ -1,12 +1,14 @@
 ﻿using Application.Interviews.Commands;
 using Application.Interviews.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class InterviewController : ControllerBase
 {
     private readonly ISender _mediator;

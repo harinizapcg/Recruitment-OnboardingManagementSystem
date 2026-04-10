@@ -29,7 +29,7 @@ namespace Application.Auth.Commands
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
                 RoleId = request.RoleId,
                 IsActive = true,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow  // already there, should be fine
             };
 
             _context.Users.Add(user);

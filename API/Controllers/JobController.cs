@@ -1,12 +1,14 @@
 ﻿using Application.Jobs.Commands;
 using Application.Jobs.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class JobController : ControllerBase
     {
         private readonly ISender _mediator;

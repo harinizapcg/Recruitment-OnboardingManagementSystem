@@ -1,12 +1,14 @@
 ﻿using Application.Requisitions.Commands;
 using Application.Requisitions.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class RequisitionController : ControllerBase
     {
         private readonly ISender _mediator;

@@ -1,11 +1,13 @@
 ﻿using Application.Candidates.Commands;
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
 using Application.Candidates.Queries;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class CandidateController : ControllerBase
     {
         private readonly ISender _mediator;
