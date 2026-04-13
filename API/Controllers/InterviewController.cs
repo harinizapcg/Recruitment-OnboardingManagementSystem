@@ -35,4 +35,23 @@ public class InterviewController : ControllerBase
 
         return Ok(result);
     }
+
+
+
+
+    [HttpPost("feedback")]
+    public async Task<IActionResult> SubmitFeedback(SubmitFeedbackCommand command)
+    {
+        var id = await _mediator.Send(command);
+        return Ok(new { message = "Feedback submitted", id });
+    }
+
+    [HttpGet("feedback/{applicationId}")]
+    public async Task<IActionResult> GetFeedback(int applicationId)
+    {
+        var result = await _mediator.Send(
+            new GetFeedbackByApplicationIdQuery { ApplicationId = applicationId });
+
+        return Ok(result);
+    }
 }

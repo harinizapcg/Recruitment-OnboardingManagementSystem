@@ -6,16 +6,16 @@ public interface IApplicationDbContext
     // Example:
     DbSet<Candidate> Candidates { get; set; }
     DbSet<Job> Jobs { get; set; }
-     DbSet<Requisition> Requisitions { get; set; }
+    DbSet<Requisition> Requisitions { get; set; }
     DbSet<User> Users { get; set; }
     DbSet<JobApplication> JobApplications { get; }
-
+    DbSet<InterviewFeedback> InterviewFeedbacks { get; }
     DbSet<Interview> Interviews { get; }
 
+    DbSet<Offer> Offers { get;  }
 
 
-
-
+    DbSet<Onboarding> Onboardings { get;  }
 
 
 

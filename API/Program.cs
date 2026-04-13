@@ -61,6 +61,9 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<ICandidateRepository, CandidateRepository>();
+builder.Services.AddScoped<IInterviewFeedbackRepository, InterviewFeedbackRepository>();
+builder.Services.AddScoped<IOfferRepository, OfferRepository>();
+builder.Services.AddScoped<IOnboardingRepository, OnboardingRepository>();
 
 // ✅ Swagger
 builder.Services.AddEndpointsApiExplorer();

@@ -16,6 +16,20 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Role> Roles { get; set; }
     public DbSet<JobApplication> JobApplications { get; set; }
 
+    public DbSet<InterviewFeedback> InterviewFeedbacks { get; set; }
+
+    public DbSet<Offer> Offers { get; set; }
+
+    public DbSet<Onboarding> Onboardings { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Offer>()
+            .Property(o => o.Salary)
+            .HasPrecision(18, 2); // ✅ FIX
+    }
+
+
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
     {
         try
