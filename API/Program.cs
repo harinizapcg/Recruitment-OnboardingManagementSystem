@@ -1,4 +1,5 @@
 using Application;
+using Application.Auth.Commands;
 using Domain.Interfaces;
 using Infrastructure;
 using Infrastructure.Repositories;
@@ -64,7 +65,8 @@ builder.Services.AddScoped<ICandidateRepository, CandidateRepository>();
 builder.Services.AddScoped<IInterviewFeedbackRepository, InterviewFeedbackRepository>();
 builder.Services.AddScoped<IOfferRepository, OfferRepository>();
 builder.Services.AddScoped<IOnboardingRepository, OnboardingRepository>();
-
+builder.Services.AddMediatR(cfg =>
+    cfg.RegisterServicesFromAssembly(typeof(LoginCommandHandler).Assembly));
 // ✅ Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>

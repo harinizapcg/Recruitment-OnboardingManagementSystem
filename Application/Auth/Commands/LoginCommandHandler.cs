@@ -13,12 +13,12 @@ namespace Application.Auth.Commands
     public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthResponseDto>
     {
         private readonly IApplicationDbContext _context;
-        private readonly IConfiguration _config;
+        private readonly IConfiguration _configuration;
 
-        public LoginCommandHandler(IApplicationDbContext context, IConfiguration config)
+        public LoginCommandHandler(IApplicationDbContext context, IConfiguration configuration)
         {
             _context = context;
-            _config = config;
+            _configuration = configuration;
         }
 
         public async Task<AuthResponseDto> Handle(LoginCommand request, CancellationToken cancellationToken)
@@ -30,45 +30,38 @@ namespace Application.Auth.Commands
             if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
                 throw new Exception("Invalid email or password");
 
-            if (!user.IsActive)
-                throw new Exception("Account is deactivated");
-
-            var token = GenerateJwtToken(user);
-
-            return new AuthResponseDto
-            {
-                Token = token,
-                Name = user.Name,
-                Email = user.Email,
-                Role = user.Role.RoleName,
-                ExpiresAt = DateTime.UtcNow.AddHours(24)
-            };
-        }
-
-        private string GenerateJwtToken(Domain.Entities.User user)
-        {
-            var key = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
-
-            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
             var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Name ?? ""),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Name, user.Name),
                 new Claim(ClaimTypes.Role, user.Role.RoleName)
             };
 
-            var token = new JwtSecurityToken(
-                issuer: _config["Jwt:Issuer"],
-                audience: _config["Jwt:Audience"],
-                claims: claims,
-                expires: DateTime.UtcNow.AddHours(24),
-                signingCredentials: credentials
+            var key = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!)
             );
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var expires = DateTime.UtcNow.AddHours(24);
+
+            var token = new JwtSecurityToken(
+                issuer: _configuration["Jwt:Issuer"],
+                audience: _configuration["Jwt:Audience"],
+                claims: claims,
+                expires: expires,
+                signingCredentials: creds
+            );
+
+            return new AuthResponseDto
+            {
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                Name = user.Name,
+                Email = user.Email,
+                Role = user.Role.RoleName,
+                ExpiresAt = expires
+            };
         }
     }
 }
