@@ -67,6 +67,7 @@ builder.Services.AddScoped<IOfferRepository, OfferRepository>();
 builder.Services.AddScoped<IOnboardingRepository, OnboardingRepository>();
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(LoginCommandHandler).Assembly));
+builder.Services.AddScoped<IJobApplicationRepository, JobApplicationRepository>();
 // ✅ Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -103,7 +104,7 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// ✅ CORS
+// ✅ CQRS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -120,7 +121,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseStaticFiles();
 app.UseCors("AllowAll");
 app.UseHttpsRedirection();
 app.UseAuthentication();

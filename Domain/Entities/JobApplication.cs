@@ -10,4 +10,8 @@
     public DateTime AppliedAt { get; set; } = DateTime.UtcNow;
 
     public string? ScreeningComments { get; set; }
+
+    
+    public string ResumePath { get; set; }
+    public string CoverLetterPath { get; set; }
 }

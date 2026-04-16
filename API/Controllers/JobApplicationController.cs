@@ -20,11 +20,18 @@ public class JobApplicationController : ControllerBase
 
     // ✅ Apply
     [HttpPost("apply")]
-    public async Task<IActionResult> Apply(ApplyToJobCommand command)
+    public async Task<IActionResult> Apply([FromForm] ApplyToJobCommand command)
     {
-        var id = await _mediator.Send(command);
-        return Ok(new { message = "Applied successfully", id });
+        var result = await _mediator.Send(command);
+        return Ok(result);
     }
+
+    //[HttpPost("apply")]
+    //public async Task<IActionResult> Apply(ApplyToJobCommand command)
+    //{
+    //    var id = await _mediator.Send(command);
+    //    return Ok(new { message = "Applied successfully", id });
+    //}
 
     // ✅ Get by Job
     [HttpGet("job/{jobId}")]
@@ -59,4 +66,9 @@ public class JobApplicationController : ControllerBase
 
         return Ok(new { message = "Candidate rejected" });
     }
+        
+     
+
+
+    
 }
