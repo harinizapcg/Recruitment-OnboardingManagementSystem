@@ -1,0 +1,32 @@
+﻿@model LoginRequestDto
+@{
+    Layout = "_Layout";
+}
+
+<div class="d-flex justify-content-center align-items-center" style="height:70vh;">
+    <div class="card shadow p-4" style="width:350px;">
+
+        <h3 class="text-center mb-3">Login</h3>
+
+        <form method="post">
+            <div class="mb-3">
+                <input asp-for="Email" class="form-control" placeholder="Email" />
+            </div>
+
+            <div class="mb-3">
+                <input asp-for="Password" type="password" class="form-control" placeholder="Password" />
+            </div>
+
+            <button class="btn btn-primary w-100">Login</button>
+            <div class="text-center mt-3">
+                <a href="/Auth/Register">Don't have an account? Register</a>
+            </div>
+        </form>
+
+        @if (ViewBag.Error != null)
+        {
+            <p class="text-danger mt-2 text-center">@ViewBag.Error</p>
+        }
+
+    </div>
+</div>

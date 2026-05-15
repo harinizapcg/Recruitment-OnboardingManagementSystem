@@ -1,0 +1,63 @@
+﻿@model List<ROMSS.UI.Models.DTO.UserDto>
+@{
+    Layout = "_Layout";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-4">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold">Users</h2>
+            <a href="/Users/Add" class="btn btn-success px-4">+ Add</a>
+        </div>
+
+        @if (Model == null || !Model.Any())
+        {
+            <div class="alert alert-info">No users found.</div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Full Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Created At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var u in Model)
+                        {
+                            <tr>
+                                <td>@u.UserId</td>
+                                <td>@u.FullName</td>
+                                <td>@u.Email</td>
+                                <td>@u.PhoneNumber</td>
+                                <td>@u.RoleName</td>
+                                <td>
+                                    <span class="badge @(u.IsActive ? "bg-success" : "bg-danger")">
+                                        @(u.IsActive ? "Active" : "Inactive")
+                                    </span>
+                                </td>
+                                <td>@(u.UserId == 0 ? "-" : u.UserId.ToString())</td>
+                                <td>@(u.CreatedAt.HasValue && u.CreatedAt.Value.Year > 1 ? u.CreatedAt.Value.ToString("dd MMM yyyy") : "-")</td>
+                                <td>
+                                    <a href="/Users/Edit/@u.UserId" class="btn btn-sm btn-warning">Edit</a>
+                                    <a href="/Users/Delete/@u.UserId" class="btn btn-sm btn-danger"
+                                       onclick="return confirm('Delete this user?')">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+    </div>
+</div>

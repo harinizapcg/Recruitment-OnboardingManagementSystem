@@ -1,0 +1,62 @@
+﻿@model List<ROMSS.UI.Models.DTO.JobDto>
+@{
+    Layout = "_Layout";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-4">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold">Jobs</h2>
+            <a href="/Job/Add" class="btn btn-success px-4">+ Add</a>
+        </div>
+
+        @if (Model == null || !Model.Any())
+        {
+            <div class="alert alert-info">No jobs found.</div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Skills</th>
+                            <th>Exp (yrs)</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var j in Model)
+                        {
+                            <tr>
+                                <td>@j.Id</td>
+                                <td>@j.Title</td>
+                                <td>@j.Description</td>
+                                <td>@j.RequiredSkills</td>
+                                <td>@j.ExperienceRequired</td>
+                                <td>@j.Location</td>
+                                <td>
+                                    <span class="badge @(j.Status == "Active" ? "bg-success" : "bg-secondary")">
+                                        @j.Status
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="/Job/Edit/@j.Id" class="btn btn-sm btn-warning">Edit</a>
+                                    <a href="/Job/Delete/@j.Id" class="btn btn-sm btn-danger"
+                                       onclick="return confirm('Delete this job?')">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+    </div>
+</div>
