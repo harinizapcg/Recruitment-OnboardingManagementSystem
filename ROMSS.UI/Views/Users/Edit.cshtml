@@ -27,7 +27,7 @@
                         <option value="">-- Select Role --</option>
                         @foreach (var role in ViewBag.Roles as List<ROMSS.UI.Models.DTO.RoleDto>)
                         {
-                            <option value="@role.RoleId">@role.RoleName</option>
+                            <option value="@role.Id">@role.RoleName</option>
                         }
                     </select>
                 </div>

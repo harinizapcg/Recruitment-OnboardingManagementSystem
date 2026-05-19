@@ -17,6 +17,7 @@ namespace API.Controllers
         public RolesController(IMediator mediator) => _mediator = mediator;
 
         [HttpGet]
+        [AllowAnonymous]  // ✅ Allow unauthenticated access for Register/Login dropdowns
         public async Task<ActionResult<List<RoleDto>>> GetAll()
         {
             var result = await _mediator.Send(new GetAllRolesQuery());

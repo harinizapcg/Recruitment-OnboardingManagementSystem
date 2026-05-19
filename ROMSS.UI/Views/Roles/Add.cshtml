@@ -1,6 +1,96 @@
-﻿namespace ROMSS.UI.Views.Roles
-{
-    public class Add
-    {
-    }
+﻿@model ROMSS.UI.Models.DTO.CreateUserDto
+
+@{
+    Layout = "_Layout";
 }
+
+<div class="container mt-5">
+
+    <div class="card shadow-lg p-4 col-md-6 mx-auto">
+
+        <h2 class="fw-bold mb-4 text-center">
+            Add User
+        </h2>
+
+        <form method="post">
+
+            <!-- Name -->
+            <div class="mb-3">
+                <label class="form-label fw-semibold">
+                    Full Name
+                </label>
+
+                <input asp-for="Name"
+                       class="form-control"
+                       placeholder="Enter full name" />
+            </div>
+
+            <!-- Email -->
+            <div class="mb-3">
+                <label class="form-label fw-semibold">
+                    Email
+                </label>
+
+                <input asp-for="Email"
+                       class="form-control"
+                       placeholder="Enter email" />
+            </div>
+
+            <!-- Password -->
+            <div class="mb-3">
+                <label class="form-label fw-semibold">
+                    Password
+                </label>
+
+                <input asp-for="Password"
+                       type="password"
+                       class="form-control"
+                       placeholder="Enter password" />
+            </div>
+
+            <!-- Role Dropdown -->
+            <div class="mb-4">
+
+                <label class="form-label fw-semibold">
+                    Role
+                </label>
+
+                <select asp-for="RoleId" class="form-select">
+
+                    <option value="">
+                        -- Select Role --
+                    </option>
+
+                    @foreach (var role in ViewBag.Roles)
+                    {
+                        <option value="@role.Id">
+                            @role.RoleName
+                        </option>
+                    }
+
+                </select>
+
+            </div>
+
+            <!-- Submit -->
+            <div class="d-grid">
+
+                <button type="submit"
+                        class="btn btn-success btn-lg">
+                    Add User
+                </button>
+
+            </div>
+
+        </form>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger mt-3">
+                @ViewBag.Error
+            </div>
+        }
+
+    </div>
+
+</div>

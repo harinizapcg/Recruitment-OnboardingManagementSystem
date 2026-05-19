@@ -21,7 +21,6 @@
 
 <body>
 
-    <!-- ✅ NAVBAR (ONLY CONDITION HERE) -->
     @if (Context.Session.GetString("JWT") != null)
     {
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -32,6 +31,9 @@
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="/Candidate/Index">Candidates</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Offer/Generate">Offer</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/Job/Index">Jobs</a>

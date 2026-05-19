@@ -52,7 +52,7 @@ public class CandidateController : Controller
         var client = GetClient();
         var data = await client.GetFromJsonAsync<UpdateCandidateRequestDto>($"Candidate/{id}");
         if (data == null) return NotFound();
-        return View(data);
+       return View(data);
     }
 
     // ✏️ EDIT (POST)
@@ -70,10 +70,19 @@ public class CandidateController : Controller
     }
 
     // 🗑️ DELETE
+    // 🗑️ DELETE - ✅ Change to HttpPost
+    [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Delete(int id)
     {
         var client = GetClient();
-        await client.DeleteAsync($"Candidate/{id}");
+        var response = await client.DeleteAsync($"Candidate/{id}");
+
+        if (!response.IsSuccessStatusCode)
+        {
+            TempData["Error"] = "Failed to delete candidate.";
+        }
+
         return RedirectToAction("Index");
     }
 }

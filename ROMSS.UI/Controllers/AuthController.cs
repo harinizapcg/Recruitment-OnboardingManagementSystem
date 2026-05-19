@@ -1,10 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ROMSS.UI.Models.DTO;
-
+using ROMSS.UI.Models.DTO;
 public class AuthController : Controller
 {
     private readonly IHttpClientFactory _factory;
+    private async Task LoadRoles()
+    {
+        var client = _factory.CreateClient("ApiClient");
 
+        var roles = await client
+            .GetFromJsonAsync<List<RoleDto>>("Roles");
+
+        ViewBag.Roles = roles;
+    }
     public AuthController(IHttpClientFactory factory)
     {
         _factory = factory;
@@ -31,6 +39,7 @@ public class AuthController : Controller
         if (!response.IsSuccessStatusCode)
         {
             ViewBag.Error = "Invalid credentials";
+            await LoadRoles();
             return View(model);
         }
         var result = await response.Content.ReadFromJsonAsync<LoginResponseDto>();
@@ -49,8 +58,10 @@ public class AuthController : Controller
     // =========================
 
     // GET: /Auth/Register
-    public IActionResult Register()
+    public async Task<IActionResult> Register()
     {
+        await LoadRoles();
+
         return View();
     }
 
@@ -65,6 +76,7 @@ public class AuthController : Controller
         if (!response.IsSuccessStatusCode)
         {
             ViewBag.Error = "Registration failed";
+            await LoadRoles();
             return View(model);
         }
 

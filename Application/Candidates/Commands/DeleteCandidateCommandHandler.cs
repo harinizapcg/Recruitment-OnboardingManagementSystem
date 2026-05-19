@@ -1,12 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Application.Candidates.Commands;
+using Domain.Interfaces;
+using MediatR;
 
-namespace Application.Candidates.Commands
+namespace Application.Candidates.Handlers
 {
-    internal class DeleteCandidateCommandHandler
+    public class DeleteCandidateCommandHandler : IRequestHandler<DeleteCandidateCommand>
     {
+        private readonly ICandidateRepository _repository;
+
+        public DeleteCandidateCommandHandler(ICandidateRepository repository)
+        {
+            _repository = repository;
+        }
+
+        public async Task Handle(DeleteCandidateCommand request, CancellationToken cancellationToken)
+        {
+            var exists = await _repository.ExistsAsync(request.Id);
+            if (!exists)
+                throw new Exception($"Candidate with ID {request.Id} not found.");
+
+            await _repository.DeleteAsync(request.Id);
+        }
     }
 }

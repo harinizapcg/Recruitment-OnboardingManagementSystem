@@ -44,8 +44,14 @@
                                 <td>@c.Source</td>
                                 <td>
                                     <a href="/Candidate/Edit/@c.Id" class="btn btn-sm btn-warning">Edit</a>
-                                    <a href="/Candidate/Delete/@c.Id" class="btn btn-sm btn-danger"
-                                       onclick="return confirm('Delete this candidate?')">Delete</a>
+
+                                    
+                                    <form method="post" action="/Candidate/Delete/@c.Id"
+                                          style="display:inline"
+                                          onsubmit="return confirm('Delete this candidate?')">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                    </form>
                                 </td>
                             </tr>
                         }

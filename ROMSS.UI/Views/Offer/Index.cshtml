@@ -1,0 +1,48 @@
+﻿@model ROMSS.UI.Models.DTO.OfferDto
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="container mt-5">
+
+    @if (Model != null)
+    {
+        <div class="card shadow p-4">
+
+            <h2 class="mb-4">Offer Details</h2>
+
+            <table class="table table-bordered">
+
+                <tr>
+                    <th>Offer ID</th>
+                    <td>@Model.Id</td>
+                </tr>
+
+                <tr>
+                    <th>Application ID</th>
+                    <td>@Model.ApplicationId</td>
+                </tr>
+
+                <tr>
+                    <th>Offer Letter</th>
+                    <td>@Model.OfferLetter</td>
+                </tr>
+
+                <tr>
+                    <th>Created Date</th>
+                    <td>@Model.CreatedDate</td>
+                </tr>
+
+            </table>
+
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-danger">
+            Offer not found
+        </div>
+    }
+
+</div>
