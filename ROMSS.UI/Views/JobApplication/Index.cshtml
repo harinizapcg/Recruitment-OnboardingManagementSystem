@@ -1,6 +1,83 @@
-﻿namespace ROMSS.UI.Views.JobApplication
-{
-    public class Index
-    {
-    }
+﻿@model List<ROMSS.UI.Models.DTO.JobApplicationDto>
+@{
+    Layout = "_Layout";
 }
+
+<div class="card shadow-lg p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">Applications for Job #@ViewBag.JobId</h2>
+        <a href="/JobApplication/Apply?jobId=@ViewBag.JobId" class="btn btn-success px-4">+ Apply</a>
+    </div>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">@ViewBag.Error</div>
+    }
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-info">No applications found.</div>
+    }
+    else
+    {
+        <table class="table table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Candidate ID</th>
+                    <th>Status</th>
+                    <th>Applied At</th>
+                    <th>Comments</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var a in Model)
+                {
+                    <tr>
+                        <td>@a.Id</td>
+                        <td>@a.CandidateId</td>
+                        <td>
+                            <span class="badge
+                                @(a.Status == "Shortlisted" ? "bg-success" :
+                                                                    a.Status == "Rejected" ? "bg-danger" : "bg-secondary")">
+                                @a.Status
+                            </span>
+                        </td>
+                        <td>@a.AppliedAt.ToShortDateString()</td>
+                        <td>@a.ScreeningComments</td>
+                        <td>
+                            @if (a.Status != "Shortlisted" && a.Status != "Rejected")
+                            {
+                                <form method="post" action="/JobApplication/Shortlist/@a.Id"
+                                      style="display:inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="jobId" value="@ViewBag.JobId" />
+                                    <button type="submit" class="btn btn-sm btn-success">Shortlist</button>
+                                </form>
+                                <form method="post" action="/JobApplication/Reject/@a.Id"
+                                      style="display:inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="jobId" value="@ViewBag.JobId" />
+                                    <button type="submit" class="btn btn-sm btn-danger">Reject</button>
+                                </form>
+                            }
+
+                            <a href="/Interview/Index?applicationId=@a.Id"
+                               class="btn btn-sm btn-info">Interviews</a>
+
+                            @* ✅ Offer and Onboarding only for Shortlisted *@
+                            @if (a.Status == "Shortlisted")
+                            {
+                                <a href="/Offer/Index?applicationId=@a.Id"
+                                   class="btn btn-sm btn-warning">Offer</a>
+                                <a href="/Onboarding/Index?applicationId=@a.Id"
+                                   class="btn btn-sm btn-primary">Onboarding</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

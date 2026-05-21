@@ -1,6 +1,53 @@
-﻿namespace ROMSS.UI.Views.Requisition
-{
-    public class Index
-    {
-    }
+﻿@model List<ROMSS.UI.Models.DTO.RequisitionDto>
+@{
+    Layout = "_Layout";
 }
+
+<div class="card shadow-lg p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">Requisitions</h2>
+        <a href="/Requisition/Add" class="btn btn-success px-4">+ Add</a>
+    </div>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-info">No requisitions found.</div>
+    }
+    else
+    {
+        <table class="table table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Title</th>
+                    <th>Skills</th>
+                    <th>Exp (yrs)</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model)
+                {
+                    <tr>
+                        <td>@r.Id</td>
+                        <td>@r.Title</td>
+                        <td>@r.RequiredSkills</td>
+                        <td>@r.ExperienceRequired</td>
+                        <td>@r.Priority</td>
+                        <td>@r.Status</td>
+                        <td>
+                            <a href="/Requisition/Edit/@r.Id" class="btn btn-sm btn-warning">Edit</a>
+                            <form method="post" action="/Requisition/Delete/@r.Id" style="display:inline"
+                                  onsubmit="return confirm('Delete this requisition?')">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

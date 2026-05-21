@@ -1,11 +1,10 @@
-﻿using Application.Common.Interfaces;
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.JobApplications.Queries;
 
 public class GetApplicationsByJobQueryHandler
-    : IRequestHandler<GetApplicationsByJobQuery, List<JobApplication>>
+    : IRequestHandler<GetApplicationsByJobQuery, List<JobApplicationResult>>
 {
     private readonly IApplicationDbContext _context;
 
@@ -14,12 +13,23 @@ public class GetApplicationsByJobQueryHandler
         _context = context;
     }
 
-    public async Task<List<JobApplication>> Handle(
+    public async Task<List<JobApplicationResult>> Handle(
         GetApplicationsByJobQuery request,
         CancellationToken cancellationToken)
     {
         return await _context.JobApplications
             .Where(x => x.JobId == request.JobId)
+            .Select(x => new JobApplicationResult
+            {
+                Id = x.Id,
+                JobId = x.JobId,
+                CandidateId = x.CandidateId,
+                Status = x.Status,
+                AppliedAt = x.AppliedAt,
+                ScreeningComments = x.ScreeningComments,
+                ResumePath = x.ResumePath ?? string.Empty,
+                CoverLetterPath = x.CoverLetterPath ?? string.Empty
+            })
             .ToListAsync(cancellationToken);
     }
 }

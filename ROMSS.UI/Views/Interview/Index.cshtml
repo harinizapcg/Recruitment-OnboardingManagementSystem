@@ -1,0 +1,50 @@
+﻿@model List<ROMSS.UI.Models.DTO.InterviewDto>
+@{
+    Layout = "_Layout";
+}
+
+<div class="card shadow-lg p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">Interviews for Application #@ViewBag.ApplicationId</h2>
+        <a href="/Interview/Schedule?applicationId=@ViewBag.ApplicationId" class="btn btn-success px-4">+ Schedule</a>
+    </div>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-info">No interviews scheduled.</div>
+    }
+    else
+    {
+        <table class="table table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Date</th>
+                    <th>Interviewer</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var i in Model)
+                {
+                    <tr>
+                        <td>@i.Id</td>
+                        <td>@i.InterviewDate.ToShortDateString()</td>
+                        <td>@i.Interviewer</td>
+                        <td>
+                            <span class="badge @(i.Status == "Completed" ? "bg-success" : "bg-warning text-dark")">
+                                @i.Status
+                            </span>
+                        </td>
+                        <td>
+                            <a href="/Interview/SubmitFeedback?applicationId=@ViewBag.ApplicationId&interviewId=@i.Id"
+                               class="btn btn-sm btn-primary">Submit Feedback</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <a href="/Interview/Feedback?applicationId=@ViewBag.ApplicationId" class="btn btn-outline-secondary mt-2">View All Feedback</a>
+    }
+</div>

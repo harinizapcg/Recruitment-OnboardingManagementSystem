@@ -18,7 +18,6 @@ public class JobApplicationController : ControllerBase
         _mediator = mediator;
     }
 
-    // ✅ Apply
     [HttpPost("apply")]
     public async Task<IActionResult> Apply([FromForm] ApplyToJobCommand command)
     {
@@ -26,14 +25,6 @@ public class JobApplicationController : ControllerBase
         return Ok(result);
     }
 
-    //[HttpPost("apply")]
-    //public async Task<IActionResult> Apply(ApplyToJobCommand command)
-    //{
-    //    var id = await _mediator.Send(command);
-    //    return Ok(new { message = "Applied successfully", id });
-    //}
-
-    // ✅ Get by Job
     [HttpGet("job/{jobId}")]
     public async Task<IActionResult> GetByJob(int jobId)
     {
@@ -41,34 +32,25 @@ public class JobApplicationController : ControllerBase
         return Ok(result);
     }
 
-    // 🔥 FIXED: Shortlist
     [HttpPut("shortlist/{id}")]
-    public async Task<IActionResult> Shortlist(int id, [FromBody] string? comments)
+    public async Task<IActionResult> Shortlist(int id)
     {
         await _mediator.Send(new ShortlistCandidateCommand
         {
             ApplicationId = id,
-            Comments = comments
+            Comments = null
         });
-
         return Ok(new { message = "Candidate shortlisted" });
     }
 
-    // 🔥 FIXED: Reject
     [HttpPut("reject/{id}")]
-    public async Task<IActionResult> Reject(int id, [FromBody] string? comments)
+    public async Task<IActionResult> Reject(int id)
     {
         await _mediator.Send(new RejectCandidateCommand
         {
             ApplicationId = id,
-            Comments = comments
+            Comments = null
         });
-
         return Ok(new { message = "Candidate rejected" });
     }
-        
-     
-
-
-    
 }

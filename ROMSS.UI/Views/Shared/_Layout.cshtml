@@ -4,18 +4,10 @@
     <meta charset="utf-8" />
     <title>ROMSS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-
     <style>
-            body {
-                background-color: #f4f6f9;
-            }
-
-            .card {
-                border-radius: 12px;
-            }
+        body { background-color: #f4f6f9; }
+        .card { border-radius: 12px; }
     </style>
 </head>
 
@@ -25,37 +17,46 @@
     {
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container-fluid">
-
                 <a class="navbar-brand" href="/">ROMSS</a>
 
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Candidate/Index">Candidates</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Offer/Generate">Offer</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Job/Index">Jobs</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Users/Index">Users</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Roles/Index">Roles</a>
-                    </li>
-                </ul>
+                @* ✅ Toggler for mobile *@
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-                <a class="nav-link text-warning" href="/Auth/Logout">Logout</a>
-
+                @* ✅ Collapsible nav *@
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Candidate/Index">Candidates</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Requisition/Index">Requisitions</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Job/Index">Jobs</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Users/Index">Users</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Roles/Index">Roles</a>
+                        </li>
+                       
+                    </ul>
+                    <a class="nav-link text-warning" href="/Auth/Logout">Logout</a>
+                </div>
             </div>
         </nav>
     }
 
-    <!-- ✅ THIS MUST ALWAYS RUN -->
     <div class="container mt-4">
         @RenderBody()
     </div>
+
+    @* ✅ Bootstrap JS — required for navbar collapse to work *@
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

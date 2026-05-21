@@ -1,48 +1,23 @@
 ﻿@model ROMSS.UI.Models.DTO.OfferDto
-
 @{
     Layout = "_Layout";
 }
 
-<div class="container mt-5">
+<div class="card shadow-lg p-4 mx-auto" style="max-width:600px">
+    <h2 class="fw-bold mb-4">Offer for Application #@ViewBag.ApplicationId</h2>
 
-    @if (Model != null)
+    @if (Model == null)
     {
-        <div class="card shadow p-4">
-
-            <h2 class="mb-4">Offer Details</h2>
-
-            <table class="table table-bordered">
-
-                <tr>
-                    <th>Offer ID</th>
-                    <td>@Model.Id</td>
-                </tr>
-
-                <tr>
-                    <th>Application ID</th>
-                    <td>@Model.ApplicationId</td>
-                </tr>
-
-                <tr>
-                    <th>Offer Letter</th>
-                    <td>@Model.OfferLetter</td>
-                </tr>
-
-                <tr>
-                    <th>Created Date</th>
-                    <td>@Model.CreatedDate</td>
-                </tr>
-
-            </table>
-
-        </div>
+        <div class="alert alert-info">No offer generated yet.</div>
+        <a href="/Offer/Generate?applicationId=@ViewBag.ApplicationId" class="btn btn-success">Generate Offer</a>
     }
     else
     {
-        <div class="alert alert-danger">
-            Offer not found
-        </div>
+        <table class="table">
+            <tr><th>Salary</th><td>@Model.Salary.ToString("C")</td></tr>
+            <tr><th>Joining Date</th><td>@Model.JoiningDate.ToShortDateString()</td></tr>
+            <tr><th>Status</th><td><span class="badge bg-info">@Model.Status</span></td></tr>
+            <tr><th>Created At</th><td>@Model.CreatedAt.ToShortDateString()</td></tr>
+        </table>
     }
-
 </div>

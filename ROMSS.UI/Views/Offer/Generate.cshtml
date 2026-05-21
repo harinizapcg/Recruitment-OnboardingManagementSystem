@@ -1,31 +1,26 @@
-﻿@model ROMSS.UI.Models.DTO.GenerateOfferRequestDto
-
-@{
+﻿@{
     Layout = "_Layout";
 }
 
-<div class="container mt-5">
-    <div class="card shadow p-4 col-md-6 mx-auto">
+<div class="card shadow-lg p-4 mx-auto" style="max-width:500px">
+    <h2 class="fw-bold mb-4">Generate Offer</h2>
 
-        <h2 class="mb-4">Generate Offer</h2>
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">@ViewBag.Error</div>
+    }
 
-        <form method="post">
-
-            <div class="mb-3">
-                <label class="form-label">Application ID</label>
-                <input asp-for="ApplicationId" class="form-control" />
-            </div>
-
-            <button type="submit" class="btn btn-success">
-                Generate Offer
-            </button>
-
-        </form>
-
-        @if (ViewBag.Error != null)
-        {
-            <p class="text-danger mt-3">@ViewBag.Error</p>
-        }
-
-    </div>
+    <form method="post" action="/Offer/Generate">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="ApplicationId" value="@ViewBag.ApplicationId" />
+        <div class="mb-3">
+            <label class="form-label">Salary</label>
+            <input name="Salary" type="number" step="0.01" class="form-control" required />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Joining Date</label>
+            <input name="JoiningDate" type="date" class="form-control" required />
+        </div>
+        <button type="submit" class="btn btn-success w-100">Generate</button>
+    </form>
 </div>

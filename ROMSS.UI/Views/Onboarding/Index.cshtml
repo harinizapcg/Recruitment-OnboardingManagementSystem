@@ -1,0 +1,27 @@
+﻿@model ROMSS.UI.Models.DTO.OnboardingDto
+@{
+    Layout = "_Layout";
+}
+
+<div class="card shadow-lg p-4 mx-auto" style="max-width:600px">
+    <h2 class="fw-bold mb-4">Onboarding for Application #@ViewBag.ApplicationId</h2>
+
+    @if (Model == null)
+    {
+        <div class="alert alert-info">No onboarding record found.</div>
+        <a href="/Onboarding/Upload?applicationId=@ViewBag.ApplicationId" class="btn btn-success">Upload Documents</a>
+    }
+    else
+    {
+        <table class="table">
+            <tr><th>Document Path</th><td>@Model.DocumentPath</td></tr>
+            <tr><th>Status</th><td><span class="badge bg-info">@Model.Status</span></td></tr>
+            <tr><th>Created At</th><td>@Model.CreatedAt.ToShortDateString()</td></tr>
+        </table>
+
+        <form method="post" action="/Onboarding/Verify/@ViewBag.ApplicationId">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-success">Verify Documents</button>
+        </form>
+    }
+</div>
