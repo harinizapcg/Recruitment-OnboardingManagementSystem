@@ -18,6 +18,7 @@
                     <th>Interview ID</th>
                     <th>Interviewer ID</th>
                     <th>Rating</th>
+                    <th>Result</th>
                     <th>Comments</th>
                     <th>Submitted At</th>
                 </tr>
@@ -29,6 +30,11 @@
                         <td>@f.InterviewId</td>
                         <td>@f.InterviewerId</td>
                         <td>@f.Rating / 5</td>
+                        <td>
+                            <span class="badge @(f.Result == "Selected" ? "bg-success" : "bg-danger")">
+                                @f.Result
+                            </span>
+                        </td>
                         <td>@f.Comments</td>
                         <td>@f.SubmittedAt.ToShortDateString()</td>
                     </tr>
@@ -36,5 +42,9 @@
             </tbody>
         </table>
     }
-    <a href="/Interview/Index?applicationId=@ViewBag.ApplicationId" class="btn btn-secondary mt-2">Back</a>
+
+    <div class="mt-3">
+        <a href="/Interview/Index?applicationId=@ViewBag.ApplicationId&jobId=@ViewBag.JobId"
+           class="btn btn-secondary">← Back to Interviews</a>
+    </div>
 </div>

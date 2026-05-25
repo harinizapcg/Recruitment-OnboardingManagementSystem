@@ -18,7 +18,6 @@ public class InterviewController : ControllerBase
         _mediator = mediator;
     }
 
-    // ✅ Schedule interview
     [HttpPost("schedule")]
     public async Task<IActionResult> Schedule(ScheduleInterviewCommand command)
     {
@@ -26,18 +25,13 @@ public class InterviewController : ControllerBase
         return Ok(new { message = "Interview scheduled", id });
     }
 
-    // ✅ Get interviews by application
     [HttpGet("application/{applicationId}")]
     public async Task<IActionResult> GetByApplication(int applicationId)
     {
         var result = await _mediator.Send(
             new GetInterviewsByApplicationQuery { JobApplicationId = applicationId });
-
         return Ok(result);
     }
-
-
-
 
     [HttpPost("feedback")]
     public async Task<IActionResult> SubmitFeedback(SubmitFeedbackCommand command)
@@ -51,7 +45,6 @@ public class InterviewController : ControllerBase
     {
         var result = await _mediator.Send(
             new GetFeedbackByApplicationIdQuery { ApplicationId = applicationId });
-
         return Ok(result);
     }
 }

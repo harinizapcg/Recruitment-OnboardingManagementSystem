@@ -9,7 +9,8 @@
     @if (Model == null)
     {
         <div class="alert alert-info">No offer generated yet.</div>
-        <a href="/Offer/Generate?applicationId=@ViewBag.ApplicationId" class="btn btn-success">Generate Offer</a>
+        <a href="/Offer/Generate?applicationId=@ViewBag.ApplicationId"
+           class="btn btn-success">Generate Offer</a>
     }
     else
     {
@@ -19,5 +20,8 @@
             <tr><th>Status</th><td><span class="badge bg-info">@Model.Status</span></td></tr>
             <tr><th>Created At</th><td>@Model.CreatedAt.ToShortDateString()</td></tr>
         </table>
+
+        <a href="/Onboarding/Index?applicationId=@ViewBag.ApplicationId"
+           class="btn btn-primary mt-3">Proceed to Onboarding →</a>
     }
 </div>

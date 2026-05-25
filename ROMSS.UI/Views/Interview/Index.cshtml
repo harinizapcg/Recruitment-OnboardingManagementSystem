@@ -6,12 +6,13 @@
 <div class="card shadow-lg p-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold">Interviews for Application #@ViewBag.ApplicationId</h2>
-        <a href="/Interview/Schedule?applicationId=@ViewBag.ApplicationId" class="btn btn-success px-4">+ Schedule</a>
+        <a href="/Interview/Schedule?applicationId=@ViewBag.ApplicationId&jobId=@ViewBag.JobId"
+           class="btn btn-success px-4">+ Schedule Interview</a>
     </div>
 
     @if (Model == null || !Model.Any())
     {
-        <div class="alert alert-info">No interviews scheduled.</div>
+        <div class="alert alert-info">No interviews scheduled yet.</div>
     }
     else
     {
@@ -38,13 +39,18 @@
                             </span>
                         </td>
                         <td>
-                            <a href="/Interview/SubmitFeedback?applicationId=@ViewBag.ApplicationId&interviewId=@i.Id"
+                            <a href="/Interview/SubmitFeedback?applicationId=@ViewBag.ApplicationId&interviewId=@i.Id&jobId=@ViewBag.JobId"
                                class="btn btn-sm btn-primary">Submit Feedback</a>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
-        <a href="/Interview/Feedback?applicationId=@ViewBag.ApplicationId" class="btn btn-outline-secondary mt-2">View All Feedback</a>
+
+        <a href="/Interview/Feedback?applicationId=@ViewBag.ApplicationId&jobId=@ViewBag.JobId"
+           class="btn btn-outline-secondary mt-2">View All Feedback</a>
     }
+
+    <a href="/JobApplication/Index?jobId=@ViewBag.JobId"
+       class="btn btn-secondary mt-3">← Back to Applications</a>
 </div>

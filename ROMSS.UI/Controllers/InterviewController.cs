@@ -21,58 +21,87 @@ public class InterviewController : Controller
         return client;
     }
 
-    public async Task<IActionResult> Index(int applicationId)
+    // List interviews for an application
+    public async Task<IActionResult> Index(int applicationId, int jobId)
     {
         var client = GetClient();
-        var data = await client.GetFromJsonAsync<List<InterviewDto>>($"Interview/application/{applicationId}");
+        var response = await client.GetAsync($"Interview/application/{applicationId}");
+        var data = response.IsSuccessStatusCode
+            ? await response.Content.ReadFromJsonAsync<List<InterviewDto>>()
+            : new List<InterviewDto>();
+
         ViewBag.ApplicationId = applicationId;
+        ViewBag.JobId = jobId;
         return View(data);
     }
 
-    public IActionResult Schedule(int applicationId)
+    // Schedule interview (GET)
+    public IActionResult Schedule(int applicationId, int jobId)
     {
         ViewBag.ApplicationId = applicationId;
+        ViewBag.JobId = jobId;
         return View();
     }
 
+    // Schedule interview (POST)
     [HttpPost]
-    public async Task<IActionResult> Schedule(ScheduleInterviewRequestDto model)
+    public async Task<IActionResult> Schedule(ScheduleInterviewRequestDto model, int jobId)
     {
         var client = GetClient();
         var response = await client.PostAsJsonAsync("Interview/schedule", model);
         if (!response.IsSuccessStatusCode)
         {
             ViewBag.Error = "Failed to schedule interview.";
+            ViewBag.ApplicationId = model.JobApplicationId;
+            ViewBag.JobId = jobId;
             return View(model);
         }
-        return RedirectToAction("Index", new { applicationId = model.JobApplicationId });
+        return RedirectToAction("Index", new { applicationId = model.JobApplicationId, jobId });
     }
 
-    public async Task<IActionResult> Feedback(int applicationId)
+    // View feedbacks for an application
+    public async Task<IActionResult> Feedback(int applicationId, int jobId)
     {
         var client = GetClient();
-        var data = await client.GetFromJsonAsync<List<InterviewFeedbackDto>>($"Interview/feedback/{applicationId}");
+        var response = await client.GetAsync($"Interview/feedback/{applicationId}");
+        var data = response.IsSuccessStatusCode
+            ? await response.Content.ReadFromJsonAsync<List<InterviewFeedbackDto>>()
+            : new List<InterviewFeedbackDto>();
+
         ViewBag.ApplicationId = applicationId;
+        ViewBag.JobId = jobId;
         return View(data);
     }
 
-    public IActionResult SubmitFeedback(int applicationId, int interviewId)
+    // Submit feedback (GET)
+    public IActionResult SubmitFeedback(int applicationId, int interviewId, int jobId)
     {
         ViewBag.ApplicationId = applicationId;
         ViewBag.InterviewId = interviewId;
+        ViewBag.JobId = jobId;
         return View();
     }
 
+    // Submit feedback (POST)
     [HttpPost]
-    public async Task<IActionResult> SubmitFeedback(SubmitFeedbackRequestDto model)
+    public async Task<IActionResult> SubmitFeedback(SubmitFeedbackRequestDto model, int jobId)
     {
         var client = GetClient();
         var response = await client.PostAsJsonAsync("Interview/feedback", model);
         if (!response.IsSuccessStatusCode)
         {
             ViewBag.Error = "Failed to submit feedback.";
+            ViewBag.ApplicationId = model.ApplicationId;
+            ViewBag.InterviewId = model.InterviewId;
+            ViewBag.JobId = jobId;
             return View(model);
         }
-        return RedirectToAction("Feedback", new { applicationId = model.ApplicationId });
+
+        // If Selected → go to Offer, else back to applications
+        if (model.Result == "Selected")
+            return RedirectToAction("Generate", "Offer",
+                new { applicationId = model.ApplicationId, jobId });
+
+        return RedirectToAction("Index", "JobApplication", new { jobId });
     }
 }

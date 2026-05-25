@@ -27,7 +27,7 @@ public class JobApplicationController : Controller
         var response = await client.GetAsync($"JobApplication/job/{jobId}");
         if (!response.IsSuccessStatusCode)
         {
-            ViewBag.Error = $"Failed to load applications. Status: {response.StatusCode}";
+            ViewBag.Error = "Failed to load applications.";
             ViewBag.JobId = jobId;
             return View(new List<JobApplicationDto>());
         }

@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Application.Common.Interfaces;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.JobApplications.Queries;
@@ -19,17 +20,21 @@ public class GetApplicationsByJobQueryHandler
     {
         return await _context.JobApplications
             .Where(x => x.JobId == request.JobId)
-            .Select(x => new JobApplicationResult
-            {
-                Id = x.Id,
-                JobId = x.JobId,
-                CandidateId = x.CandidateId,
-                Status = x.Status,
-                AppliedAt = x.AppliedAt,
-                ScreeningComments = x.ScreeningComments,
-                ResumePath = x.ResumePath ?? string.Empty,
-                CoverLetterPath = x.CoverLetterPath ?? string.Empty
-            })
+            .Join(_context.Candidates,
+                app => app.CandidateId,
+                c => c.Id,
+                (app, c) => new JobApplicationResult
+                {
+                    Id = app.Id,
+                    JobId = app.JobId,
+                    CandidateId = app.CandidateId,
+                    CandidateName = c.Name,
+                    Status = app.Status,
+                    AppliedAt = app.AppliedAt,
+                    ScreeningComments = app.ScreeningComments,
+                    ResumePath = app.ResumePath ?? string.Empty,
+                    CoverLetterPath = app.CoverLetterPath ?? string.Empty
+                })
             .ToListAsync(cancellationToken);
     }
 }

@@ -24,10 +24,9 @@
             <thead class="table-dark">
                 <tr>
                     <th>#</th>
-                    <th>Candidate ID</th>
+                    <th>Candidate</th>
                     <th>Status</th>
                     <th>Applied At</th>
-                    <th>Comments</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -36,7 +35,10 @@
                 {
                     <tr>
                         <td>@a.Id</td>
-                        <td>@a.CandidateId</td>
+                        <td>
+                            @a.CandidateName
+                            <small class="text-muted">(ID: @a.CandidateId)</small>
+                        </td>
                         <td>
                             <span class="badge
                                 @(a.Status == "Shortlisted" ? "bg-success" :
@@ -45,9 +47,8 @@
                             </span>
                         </td>
                         <td>@a.AppliedAt.ToShortDateString()</td>
-                        <td>@a.ScreeningComments</td>
                         <td>
-                            @if (a.Status != "Shortlisted" && a.Status != "Rejected")
+                            @if (a.Status == "Applied" || a.Status == "Pending")
                             {
                                 <form method="post" action="/JobApplication/Shortlist/@a.Id"
                                       style="display:inline">
@@ -62,17 +63,14 @@
                                     <button type="submit" class="btn btn-sm btn-danger">Reject</button>
                                 </form>
                             }
-
-                            <a href="/Interview/Index?applicationId=@a.Id"
-                               class="btn btn-sm btn-info">Interviews</a>
-
-                            @* ✅ Offer and Onboarding only for Shortlisted *@
-                            @if (a.Status == "Shortlisted")
+                            else if (a.Status == "Shortlisted")
                             {
-                                <a href="/Offer/Index?applicationId=@a.Id"
-                                   class="btn btn-sm btn-warning">Offer</a>
-                                <a href="/Onboarding/Index?applicationId=@a.Id"
-                                   class="btn btn-sm btn-primary">Onboarding</a>
+                                <a href="/Interview/Index?applicationId=@a.Id&jobId=@ViewBag.JobId"
+                                   class="btn btn-sm btn-info">Interviews</a>
+                            }
+                            else if (a.Status == "Rejected")
+                            {
+                                <span class="text-muted fst-italic">No further action</span>
                             }
                         </td>
                     </tr>

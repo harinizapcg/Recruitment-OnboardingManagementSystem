@@ -24,7 +24,21 @@ public class OnboardingController : Controller
     public async Task<IActionResult> Index(int applicationId)
     {
         var client = GetClient();
-        var data = await client.GetFromJsonAsync<OnboardingDto>($"Onboarding/{applicationId}");
+        var response = await client.GetAsync($"Onboarding/{applicationId}");
+
+        OnboardingDto? data = null;
+
+        if (response.IsSuccessStatusCode)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            if (!string.IsNullOrWhiteSpace(content) && content != "null")
+                data = System.Text.Json.JsonSerializer.Deserialize<OnboardingDto>(content,
+                    new System.Text.Json.JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+        }
+
         ViewBag.ApplicationId = applicationId;
         return View(data);
     }
@@ -43,12 +57,14 @@ public class OnboardingController : Controller
         if (!response.IsSuccessStatusCode)
         {
             ViewBag.Error = "Failed to upload documents.";
+            ViewBag.ApplicationId = model.ApplicationId;
             return View(model);
         }
         return RedirectToAction("Index", new { applicationId = model.ApplicationId });
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Verify(int applicationId)
     {
         var client = GetClient();
