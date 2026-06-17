@@ -1,74 +1,66 @@
-﻿@model ROMSS.UI.Models.DTO.UpdateRequisitionRequestDto
+@model ROMSS.UI.Models.DTO.UpdateRequisitionRequestDto
 @{
     Layout = "_Layout";
 }
 
-<div class="card shadow-lg p-4 mx-auto" style="max-width:600px">
-    <h2 class="fw-bold mb-4">Edit Requisition</h2>
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-0 shadow-sm overflow-hidden">
+                <div class="card-header bg-white border-bottom py-4 px-4 px-md-5">
+                    <h3 class="mb-0 fw-bold">Edit Requisition</h3>
+                    <p class="mb-0 small text-muted">Update job requisition details.</p>
+                </div>
+                <div class="card-body p-4 p-md-5">
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger small border-0 bg-danger bg-opacity-10 text-danger mb-4">@ViewBag.Error</div>
+                    }
 
-    @if (ViewBag.Error != null)
-    {
-        <div class="alert alert-danger">@ViewBag.Error</div>
-    }
-
-    <form method="post" action="/Requisition/Edit">
-        @Html.AntiForgeryToken()
-        <input type="hidden" name="Id" value="@Model.Id" />
-        <div class="mb-3">
-            <label class="form-label">Title</label>
-            <input name="Title" value="@Model.Title" class="form-control" required />
+                    <form method="post" action="/Requisition/Edit">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="Id" value="@Model.Id" />
+                        <div class="mb-4">
+                            <label class="form-label fw-medium text-muted small text-uppercase">Title</label>
+                            <input name="Title" value="@Model.Title" class="form-control form-control-lg bg-light" required />
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-medium text-muted small text-uppercase">Description</label>
+                            <textarea name="Description" class="form-control bg-light" rows="3">@Model.Description</textarea>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-medium text-muted small text-uppercase">Required Skills</label>
+                            <input name="RequiredSkills" value="@Model.RequiredSkills" class="form-control form-control-lg bg-light" />
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label fw-medium text-muted small text-uppercase">Experience Required (yrs)</label>
+                                <input name="ExperienceRequired" type="number" value="@Model.ExperienceRequired" class="form-control form-control-lg bg-light" />
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label fw-medium text-muted small text-uppercase">Priority</label>
+                                <select name="Priority" class="form-select form-select-lg bg-light">
+                                    @if (Model.Priority == "Low") { <option value="Low" selected>Low</option> } else { <option value="Low">Low</option> }
+                                    @if (Model.Priority == "Medium") { <option value="Medium" selected>Medium</option> } else { <option value="Medium">Medium</option> }
+                                    @if (Model.Priority == "High") { <option value="High" selected>High</option> } else { <option value="High">High</option> }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-5">
+                            <label class="form-label fw-medium text-muted small text-uppercase">Status</label>
+                            <select name="Status" class="form-select form-select-lg bg-light">
+                                @if (Model.Status == "Open") { <option value="Open" selected>Open</option> } else { <option value="Open">Open</option> }
+                                @if (Model.Status == "Closed") { <option value="Closed" selected>Closed</option> } else { <option value="Closed">Closed</option> }
+                            </select>
+                        </div>
+                        
+                        <div class="d-flex gap-3">
+                            <button type="submit" class="btn btn-primary btn-lg fw-bold px-5 w-100">Update Requisition</button>
+                            <a href="/Requisition/Index" class="btn btn-light btn-lg text-muted fw-medium px-4 w-100">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="mb-3">
-            <label class="form-label">Description</label>
-            <textarea name="Description" class="form-control" rows="3">@Model.Description</textarea>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Required Skills</label>
-            <input name="RequiredSkills" value="@Model.RequiredSkills" class="form-control" />
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Experience Required (yrs)</label>
-            <input name="ExperienceRequired" type="number" value="@Model.ExperienceRequired" class="form-control" />
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Priority</label>
-            <select name="Priority" class="form-select">
-                @if (Model.Priority == "Low")
-                {
-                    <option value="Low" selected>Low</option>
-                    <option value="Medium">Medium</option>
-                    <option value="High">High</option>
-                }
-                else if (Model.Priority == "High")
-                {
-                    <option value="Low">Low</option>
-                    <option value="Medium">Medium</option>
-                    <option value="High" selected>High</option>
-                }
-                else
-                {
-                    <option value="Low">Low</option>
-                    <option value="Medium" selected>Medium</option>
-                    <option value="High">High</option>
-                }
-            </select>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Status</label>
-            <select name="Status" class="form-select">
-                @if (Model.Status == "Closed")
-                {
-                    <option value="Open">Open</option>
-                    <option value="Closed" selected>Closed</option>
-                }
-                else
-                {
-                    <option value="Open" selected>Open</option>
-                    <option value="Closed">Closed</option>
-                }
-            </select>
-        </div>
-        <button type="submit" class="btn btn-warning w-100">Update Requisition</button>
-        <a href="/Requisition/Index" class="btn btn-secondary w-100 mt-2">Cancel</a>
-    </form>
+    </div>
 </div>

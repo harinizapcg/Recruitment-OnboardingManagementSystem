@@ -1,27 +1,83 @@
-﻿@{
+@{
     Layout = "_Layout";
 }
 
-<div class="card shadow-lg p-4 mx-auto" style="max-width:500px">
-    <h2 class="fw-bold mb-4">Schedule Interview</h2>
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-5">
+            <div class="card border-0 shadow-sm overflow-hidden">
+                <div class="card-header bg-white border-bottom py-4 px-4 px-md-5">
+                    <h3 class="mb-0 fw-bold">Schedule Interview</h3>
+                    <p class="mb-0 small text-muted">Set up an interview for this candidate.</p>
+                </div>
+                <div class="card-body p-4 p-md-5">
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger small border-0 bg-danger bg-opacity-10 text-danger mb-4">@ViewBag.Error</div>
+                    }
 
-    @if (ViewBag.Error != null)
-    {
-        <div class="alert alert-danger">@ViewBag.Error</div>
-    }
-
-    <form method="post" action="/Interview/Schedule">
-        @Html.AntiForgeryToken()
-        <input type="hidden" name="JobApplicationId" value="@ViewBag.ApplicationId" />
-        <div class="mb-3">
-            <label class="form-label">Interview Date</label>
-            <input name="InterviewDate" type="datetime-local" class="form-control" required />
+                    <form method="post" action="/Interview/Schedule">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="JobApplicationId" value="@ViewBag.ApplicationId" />
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-medium text-muted small text-uppercase">Interview Date</label>
+                            <input name="InterviewDate" type="datetime-local" class="form-control form-control-lg bg-light" required min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+                            <span class="text-danger small mt-1 d-block" id="dateError"></span>
+                        </div>
+                        
+                        <div class="mb-5">
+                            <label class="form-label fw-medium text-muted small text-uppercase">Interviewer</label>
+                            <input name="Interviewer" class="form-control form-control-lg bg-light" required minlength="3" maxlength="100" pattern="^[a-zA-Z\s]+$" title="Interviewer name must be at least 3 characters and contain only letters" placeholder="e.g. Jane Doe" />
+                            <span class="text-danger small mt-1 d-block" id="interviewerError"></span>
+                        </div>
+                        
+                        <div class="d-grid gap-3">
+                            <button type="submit" class="btn btn-primary btn-lg fw-bold">Schedule Interview</button>
+                            <a href="/Interview/Index?applicationId=@ViewBag.ApplicationId" class="btn btn-light btn-lg text-muted fw-medium">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="mb-3">
-            <label class="form-label">Interviewer</label>
-            <input name="Interviewer" class="form-control" required />
-        </div>
-        <button type="submit" class="btn btn-success w-100">Schedule</button>
-        <a href="/Interview/Index?applicationId=@ViewBag.ApplicationId" class="btn btn-secondary w-100 mt-2">Cancel</a>
-    </form>
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.querySelector('form').addEventListener('submit', function (e) {
+            let valid = true;
+
+            // Date validation
+            const dateInput = document.querySelector('[name="InterviewDate"]');
+            const dateError = document.getElementById('dateError');
+            if (!dateInput.value) {
+                dateError.textContent = 'Interview date is required';
+                valid = false;
+            } else if (new Date(dateInput.value) < new Date()) {
+                dateError.textContent = 'Interview date must be in the future';
+                valid = false;
+            } else {
+                dateError.textContent = '';
+            }
+
+            // Interviewer validation
+            const interviewerInput = document.querySelector('[name="Interviewer"]');
+            const interviewerError = document.getElementById('interviewerError');
+            if (!interviewerInput.value.trim()) {
+                interviewerError.textContent = 'Interviewer name is required';
+                valid = false;
+            } else if (interviewerInput.value.trim().length < 3) {
+                interviewerError.textContent = 'Interviewer name must be at least 3 characters';
+                valid = false;
+            } else if (!/^[a-zA-Z\s]+$/.test(interviewerInput.value.trim())) {
+                interviewerError.textContent = 'Interviewer name must contain only letters';
+                valid = false;
+            } else {
+                interviewerError.textContent = '';
+            }
+
+            if (!valid) e.preventDefault();
+        });
+    </script>
+}

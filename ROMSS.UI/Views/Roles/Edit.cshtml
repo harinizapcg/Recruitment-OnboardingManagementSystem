@@ -1,31 +1,40 @@
-﻿@model ROMSS.UI.Models.DTO.UpdateRoleRequestDto
+@model ROMSS.UI.Models.DTO.UpdateRoleRequestDto
 @{
     Layout = "_Layout";
 }
 
-<div class="row justify-content-center mt-5">
-    <div class="col-md-6">
-        <div class="card shadow p-4">
-            <h3 class="mb-4">Edit Role</h3>
-            <form method="post">
-                <input asp-for="RoleId" type="hidden" />
-                <div class="mb-3">
-                    <label class="form-label">Role Name</label>
-                    <input asp-for="RoleName" class="form-control" />
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-0 shadow-sm overflow-hidden">
+                <div class="card-header bg-white border-bottom py-4 px-4 px-md-5">
+                    <h3 class="mb-0 fw-bold">Edit Role</h3>
+                    <p class="mb-0 small text-muted">Update role details and permissions.</p>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Description</label>
-                    <textarea asp-for="RoleDescription" class="form-control" rows="3"></textarea>
+                <div class="card-body p-4 p-md-5">
+                    <form method="post">
+                        <input asp-for="RoleId" type="hidden" />
+                        <div class="mb-4">
+                            <label class="form-label fw-medium text-muted small text-uppercase">Role Name</label>
+                            <input asp-for="RoleName" class="form-control form-control-lg bg-light" />
+                        </div>
+                        <div class="mb-5">
+                            <label class="form-label fw-medium text-muted small text-uppercase">Description</label>
+                            <textarea asp-for="RoleDescription" class="form-control bg-light" rows="3"></textarea>
+                        </div>
+                        
+                        <div class="d-flex gap-3">
+                            <button type="submit" class="btn btn-primary btn-lg fw-bold px-5">Update</button>
+                            <a href="/Roles/Index" class="btn btn-light btn-lg text-muted fw-medium px-4">Cancel</a>
+                        </div>
+                    </form>
+                    
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger mt-4 small border-0 bg-danger bg-opacity-10 text-danger">@ViewBag.Error</div>
+                    }
                 </div>
-                <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-primary">Update</button>
-                    <a href="/Roles/Index" class="btn btn-secondary">Cancel</a>
-                </div>
-            </form>
-            @if (ViewBag.Error != null)
-            {
-                <p class="text-danger mt-3">@ViewBag.Error</p>
-            }
+            </div>
         </div>
     </div>
 </div>

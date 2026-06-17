@@ -12,12 +12,4 @@
         public string ResumePath { get; set; } = string.Empty;
         public string CoverLetterPath { get; set; } = string.Empty;
     }
-
-    public class ApplyJobRequestDto
-    {
-        public int JobId { get; set; }
-        public int CandidateId { get; set; }
-        public string ResumePath { get; set; } = string.Empty;
-        public string CoverLetterPath { get; set; } = string.Empty;
-    }
 }

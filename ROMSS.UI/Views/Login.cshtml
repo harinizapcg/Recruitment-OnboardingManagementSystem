@@ -1,29 +1,39 @@
-﻿@model LoginRequestDto
+@model LoginRequestDto
 @{
     Layout = "_Layout";
 }
 
-<div class="d-flex justify-content-center align-items-center" style="height:70vh;">
-    <div class="card shadow p-4" style="width:350px;">
+<div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card border-0 shadow-lg" style="width: 400px; overflow: hidden;">
+        <div class="card-header bg-primary text-white text-center py-4 border-0">
+            <h3 class="mb-0 fw-bold">Welcome Back</h3>
+            <p class="mb-0 small text-white-50">Sign in to your ROMSS account</p>
+        </div>
+        <div class="card-body p-4 p-md-5">
+            <form method="post">
+                <div class="mb-4">
+                    <label asp-for="Email" class="form-label fw-medium text-muted small text-uppercase">Email Address</label>
+                    <input asp-for="Email" class="form-control form-control-lg bg-light" placeholder="name@company.com" />
+                    <span asp-validation-for="Email" class="text-danger small mt-1 d-block"></span>
+                </div>
 
-        <h3 class="text-center mb-3">Login</h3>
+                <div class="mb-4">
+                    <label asp-for="Password" class="form-label fw-medium text-muted small text-uppercase">Password</label>
+                    <input asp-for="Password" type="password" class="form-control form-control-lg bg-light" placeholder="••••••••" />
+                    <span asp-validation-for="Password" class="text-danger small mt-1 d-block"></span>
+                </div>
 
-        <form method="post">
-            <div class="mb-3">
-                <input asp-for="Email" class="form-control" placeholder="Email" />
-            </div>
+                <div class="d-grid gap-2 mt-5">
+                    <button class="btn btn-primary btn-lg fw-bold">Login</button>
+                </div>
+            </form>
 
-            <div class="mb-3">
-                <input asp-for="Password" type="password" class="form-control" placeholder="Password" />
-            </div>
-
-            <button class="btn btn-primary w-100">Login</button>
-        </form>
-
-        @if (ViewBag.Error != null)
-        {
-            <p class="text-danger mt-2 text-center">@ViewBag.Error</p>
-        }
-
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger mt-4 text-center small border-0 bg-danger bg-opacity-10 text-danger" role="alert">
+                    @ViewBag.Error
+                </div>
+            }
+        </div>
     </div>
 </div>

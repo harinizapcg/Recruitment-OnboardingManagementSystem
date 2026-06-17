@@ -1,27 +1,71 @@
-﻿@model ROMSS.UI.Models.DTO.OnboardingDto
+@model ROMSS.UI.Models.DTO.OnboardingDto
 @{
     Layout = "_Layout";
 }
 
-<div class="card shadow-lg p-4 mx-auto" style="max-width:600px">
-    <h2 class="fw-bold mb-4">Onboarding for Application #@ViewBag.ApplicationId</h2>
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-0 shadow-sm overflow-hidden">
+                <div class="card-header bg-white border-bottom py-4 px-4 px-md-5">
+                    <h3 class="mb-0 fw-bold">Onboarding Details</h3>
+                    <p class="mb-0 small text-muted">Application #@ViewBag.ApplicationId</p>
+                </div>
+                <div class="card-body p-4 p-md-5">
+                    @if (Model == null)
+                    {
+                        <div class="text-center py-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-person-lines-fill text-muted opacity-50 mb-3" viewBox="0 0 16 16">
+                              <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5zm.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1h-4zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2z"/>
+                            </svg>
+                            <h5 class="fw-bold mb-2">No Onboarding Record</h5>
+                            <p class="text-muted small mb-4">The candidate has not started the onboarding process yet.</p>
+                            <a href="/Onboarding/Upload?applicationId=@ViewBag.ApplicationId" class="btn btn-primary btn-lg fw-bold px-4">Upload Documents</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive mb-4">
+                            <table class="table table-borderless align-middle mb-0">
+                                <tbody>
+                                    <tr class="border-bottom">
+                                        <th class="py-3 text-muted small text-uppercase w-50">Document Path</th>
+                                        <td class="py-3 fw-medium text-dark text-break">@Model.DocumentPath</td>
+                                    </tr>
+                                    <tr class="border-bottom">
+                                        <th class="py-3 text-muted small text-uppercase">Status</th>
+                                        <td class="py-3">
+                                            <span class="badge @(Model.Status == "Verified" ? "bg-success bg-opacity-10 text-success border border-success border-opacity-25" : "bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25") py-2 px-3 fw-normal">
+                                                @Model.Status
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="py-3 text-muted small text-uppercase">Created At</th>
+                                        <td class="py-3 small">@Model.CreatedAt.ToShortDateString()</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
 
-    @if (Model == null)
-    {
-        <div class="alert alert-info">No onboarding record found.</div>
-        <a href="/Onboarding/Upload?applicationId=@ViewBag.ApplicationId" class="btn btn-success">Upload Documents</a>
-    }
-    else
-    {
-        <table class="table">
-            <tr><th>Document Path</th><td>@Model.DocumentPath</td></tr>
-            <tr><th>Status</th><td><span class="badge bg-info">@Model.Status</span></td></tr>
-            <tr><th>Created At</th><td>@Model.CreatedAt.ToShortDateString()</td></tr>
-        </table>
-
-        <form method="post" action="/Onboarding/Verify/@ViewBag.ApplicationId">
-            @Html.AntiForgeryToken()
-            <button type="submit" class="btn btn-success">Verify Documents</button>
-        </form>
-    }
+                        <form method="post" action="/Onboarding/Verify/@ViewBag.ApplicationId" class="d-grid mt-2">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-success btn-lg fw-bold" @(Model.Status == "Verified" ? "disabled" : "")>
+                                @(Model.Status == "Verified" ? "Documents Verified" : "Verify Documents")
+                            </button>
+                        </form>
+                    }
+                </div>
+            </div>
+            
+            <div class="mt-4 text-center">
+                <a href="/Offer/Index?applicationId=@ViewBag.ApplicationId" class="btn btn-light text-muted fw-medium px-4 shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left me-2 mb-1" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                    </svg>
+                    Back to Offer
+                </a>
+            </div>
+        </div>
+    </div>
 </div>

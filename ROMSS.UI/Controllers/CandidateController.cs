@@ -36,6 +36,9 @@ public class CandidateController : Controller
     [HttpPost]
     public async Task<IActionResult> Add(AddCandidateRequestDto model)
     {
+        if (!ModelState.IsValid)
+            return View(model);
+
         var client = GetClient();
         var response = await client.PostAsJsonAsync("Candidate", model);
         if (!response.IsSuccessStatusCode)
@@ -52,13 +55,16 @@ public class CandidateController : Controller
         var client = GetClient();
         var data = await client.GetFromJsonAsync<UpdateCandidateRequestDto>($"Candidate/{id}");
         if (data == null) return NotFound();
-       return View(data);
+        return View(data);
     }
 
     // ✏️ EDIT (POST)
     [HttpPost]
     public async Task<IActionResult> Edit(UpdateCandidateRequestDto model)
     {
+        if (!ModelState.IsValid)
+            return View(model);
+
         var client = GetClient();
         var response = await client.PutAsJsonAsync($"Candidate/{model.Id}", model);
         if (!response.IsSuccessStatusCode)
@@ -70,7 +76,6 @@ public class CandidateController : Controller
     }
 
     // 🗑️ DELETE
-    // 🗑️ DELETE - ✅ Change to HttpPost
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Delete(int id)

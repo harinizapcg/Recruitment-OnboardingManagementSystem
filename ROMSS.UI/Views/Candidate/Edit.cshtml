@@ -1,51 +1,73 @@
-﻿@model ROMSS.UI.Models.DTO.UpdateCandidateRequestDto
+@model ROMSS.UI.Models.DTO.UpdateCandidateRequestDto
 @{
     Layout = "_Layout";
 }
 
-<div class="row justify-content-center mt-5">
-    <div class="col-md-7">
-        <div class="card shadow p-4">
-            <h3 class="mb-4">Edit Candidate</h3>
-            <form method="post">
-                <input asp-for="Id" type="hidden" />
-                <div class="mb-3">
-                    <label class="form-label">Name</label>
-                    <input asp-for="Name" class="form-control" />
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-0 shadow-sm overflow-hidden">
+                <div class="card-header bg-white border-bottom py-4 px-4 px-md-5">
+                    <h3 class="mb-0 fw-bold">Edit Candidate</h3>
+                    <p class="mb-0 small text-muted">Update candidate information.</p>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Email</label>
-                    <input asp-for="Email" class="form-control" />
+                <div class="card-body p-4 p-md-5">
+                    <form method="post">
+                        <input asp-for="Id" type="hidden" />
+                        <div class="mb-4">
+                            <label class="form-label fw-medium text-muted small text-uppercase">Name</label>
+                            <input asp-for="Name" class="form-control form-control-lg bg-light" />
+                            <span asp-validation-for="Name" class="text-danger small mt-1 d-block"></span>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-medium text-muted small text-uppercase">Email</label>
+                            <input asp-for="Email" class="form-control form-control-lg bg-light" />
+                            <span asp-validation-for="Email" class="text-danger small mt-1 d-block"></span>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-medium text-muted small text-uppercase">Phone</label>
+                            <input asp-for="Phone" class="form-control form-control-lg bg-light" />
+                            <span asp-validation-for="Phone" class="text-danger small mt-1 d-block"></span>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-medium text-muted small text-uppercase">Skills</label>
+                            <input asp-for="Skills" class="form-control form-control-lg bg-light" />
+                            <span asp-validation-for="Skills" class="text-danger small mt-1 d-block"></span>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label fw-medium text-muted small text-uppercase">Experience (yrs)</label>
+                                <input asp-for="Experience" type="number" class="form-control form-control-lg bg-light" />
+                                <span asp-validation-for="Experience" class="text-danger small mt-1 d-block"></span>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label fw-medium text-muted small text-uppercase">Source</label>
+                                <input asp-for="Source" class="form-control form-control-lg bg-light" />
+                                <span asp-validation-for="Source" class="text-danger small mt-1 d-block"></span>
+                            </div>
+                        </div>
+                        <div class="mb-5">
+                            <label class="form-label fw-medium text-muted small text-uppercase">Resume Path</label>
+                            <input asp-for="ResumePath" class="form-control form-control-lg bg-light" />
+                            <span asp-validation-for="ResumePath" class="text-danger small mt-1 d-block"></span>
+                        </div>
+                        
+                        <div class="d-flex gap-3">
+                            <button type="submit" class="btn btn-primary btn-lg fw-bold px-5">Update</button>
+                            <a href="/Candidate/Index" class="btn btn-light btn-lg text-muted fw-medium px-4">Cancel</a>
+                        </div>
+                    </form>
+                    
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger mt-4 small border-0 bg-danger bg-opacity-10 text-danger">@ViewBag.Error</div>
+                    }
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Phone</label>
-                    <input asp-for="Phone" class="form-control" />
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Skills</label>
-                    <input asp-for="Skills" class="form-control" />
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Experience (years)</label>
-                    <input asp-for="Experience" type="number" class="form-control" />
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Resume Path</label>
-                    <input asp-for="ResumePath" class="form-control" />
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Source</label>
-                    <input asp-for="Source" class="form-control" />
-                </div>
-                <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-primary">Update</button>
-                    <a href="/Candidate/Index" class="btn btn-secondary">Cancel</a>
-                </div>
-            </form>
-            @if (ViewBag.Error != null)
-            {
-                <p class="text-danger mt-3">@ViewBag.Error</p>
-            }
+            </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

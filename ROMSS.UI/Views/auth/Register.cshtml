@@ -1,178 +1,67 @@
-﻿@model ROMSS.UI.Models.DTO.RegisterDto
+@model ROMSS.UI.Models.DTO.RegisterDto
 
 @{
-    Layout = null;
+    Layout = "_Layout";
 }
 
-<!DOCTYPE html>
-<html>
-
-<head>
-
-    <meta charset="utf-8" />
-
-    <title>Register - ROMSS</title>
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1" />
-
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-          rel="stylesheet" />
-
-    <style>
-
-            body {
-                background: linear-gradient(to right, #1d3557, #457b9d);
-                height: 100vh;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-
-            .register-card {
-                width: 420px;
-                background: white;
-                padding: 40px;
-                border-radius: 16px;
-                box-shadow: 0px 8px 25px rgba(0,0,0,0.2);
-            }
-
-            .register-title {
-                text-align: center;
-                font-weight: bold;
-                margin-bottom: 30px;
-                color: #1d3557;
-            }
-
-            .form-control,
-            .form-select {
-                height: 50px;
-                border-radius: 10px;
-            }
-
-            .btn-register {
-                background-color: #198754;
-                color: white;
-                height: 50px;
-                border-radius: 10px;
-                font-weight: 600;
-                font-size: 18px;
-            }
-
-                .btn-register:hover {
-                    background-color: #157347;
-                    color: white;
-                }
-
-            .login-link {
-                text-align: center;
-                margin-top: 18px;
-            }
-
-                .login-link a {
-                    text-decoration: none;
-                    font-weight: 600;
-                }
-
-    </style>
-
-</head>
-
-<body>
-
-    <div class="register-card">
-
-        <h1 class="register-title">
-            Register
-        </h1>
-
-        <form method="post">
-
-            <!-- Full Name -->
-            <div class="mb-3">
-
-                <input asp-for="Name"
-                       class="form-control"
-                       placeholder="Full Name" />
-
-            </div>
-
-            <!-- Email -->
-            <div class="mb-3">
-
-                <input asp-for="Email"
-                       class="form-control"
-                       placeholder="Email" />
-
-            </div>
-
-            <!-- Password -->
-            <div class="mb-3">
-
-                <input asp-for="Password"
-                       type="password"
-                       class="form-control"
-                       placeholder="Password" />
-
-            </div>
-
-            <!-- Role Dropdown -->
-            <div class="mb-4">
-
-                <select asp-for="RoleId"
-                        class="form-select">
-
-                    <option value="">
-                        -- Select Role --
-                    </option>
-
-                    @foreach (var role in ViewBag.Roles)
-                    {
-                        <option value="@role.Id">
-                            @role.RoleName
-                        </option>
-                    }
-
-                </select>
-
-            </div>
-
-            <!-- Register Button -->
-            <div class="d-grid">
-
-                <button type="submit"
-                        class="btn btn-register">
-
-                    Register
-
-                </button>
-
-            </div>
-
-        </form>
-
-        <!-- Error -->
-        @if (ViewBag.Error != null)
-        {
-            <div class="alert alert-danger mt-3">
-                @ViewBag.Error
-            </div>
-        }
-
-        <!-- Login Link -->
-        <div class="login-link">
-
-            Already have an account?
-
-            <a href="/Auth/Login">
-                Login
-            </a>
-
+<div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card border-0 shadow-lg" style="width: 450px; overflow: hidden;">
+        <div class="card-header bg-primary text-white text-center py-4 border-0">
+            <h3 class="mb-0 fw-bold">Create Account</h3>
+            <p class="mb-0 small text-white-50">Join ROMSS today</p>
         </div>
+        <div class="card-body p-4 p-md-5">
+            <form method="post">
+                <div class="mb-4">
+                    <label asp-for="Name" class="form-label fw-medium text-muted small text-uppercase">Full Name</label>
+                    <input asp-for="Name" class="form-control form-control-lg bg-light" placeholder="John Doe" />
+                    <span asp-validation-for="Name" class="text-danger small mt-1 d-block"></span>
+                </div>
 
+                <div class="mb-4">
+                    <label asp-for="Email" class="form-label fw-medium text-muted small text-uppercase">Email Address</label>
+                    <input asp-for="Email" class="form-control form-control-lg bg-light" placeholder="name@company.com" />
+                    <span asp-validation-for="Email" class="text-danger small mt-1 d-block"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Password" class="form-label fw-medium text-muted small text-uppercase">Password</label>
+                    <input asp-for="Password" type="password" class="form-control form-control-lg bg-light" placeholder="••••••••" />
+                    <span asp-validation-for="Password" class="text-danger small mt-1 d-block"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="RoleId" class="form-label fw-medium text-muted small text-uppercase">Role</label>
+                    <select asp-for="RoleId" class="form-select form-select-lg bg-light">
+                        <option value="">-- Select Role --</option>
+                        @foreach (var role in ViewBag.Roles)
+                        {
+                            <option value="@role.Id">@role.RoleName</option>
+                        }
+                    </select>
+                    <span asp-validation-for="RoleId" class="text-danger small mt-1 d-block"></span>
+                </div>
+
+                <div class="d-grid gap-2 mt-5">
+                    <button type="submit" class="btn btn-primary btn-lg fw-bold">Register</button>
+                </div>
+
+                <div class="text-center mt-4">
+                    <span class="text-muted small">Already have an account?</span>
+                    <a href="/Auth/Login" class="text-decoration-none fw-semibold ms-1">Login here</a>
+                </div>
+            </form>
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger mt-4 text-center small border-0 bg-danger bg-opacity-10 text-danger" role="alert">
+                    @ViewBag.Error
+                </div>
+            }
+        </div>
     </div>
+</div>
 
-</body>
-
-</html>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,48 +1,79 @@
-﻿@{
+@{
     Layout = "_Layout";
 }
 
-<div class="card shadow-lg p-4 mx-auto" style="max-width:500px">
-    <h2 class="fw-bold mb-4">Submit Interview Feedback</h2>
-
-    @if (ViewBag.Error != null)
-    {
-        <div class="alert alert-danger">@ViewBag.Error</div>
-    }
-
-    <form method="post" action="/Interview/SubmitFeedback?jobId=@ViewBag.JobId">
-        @Html.AntiForgeryToken()
-        <input type="hidden" name="ApplicationId" value="@ViewBag.ApplicationId" />
-        <input type="hidden" name="InterviewId" value="@ViewBag.InterviewId" />
-        <div class="mb-3">
-            <label class="form-label">Interviewer ID</label>
-            <input name="InterviewerId" type="number" class="form-control" required />
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Rating (1-5)</label>
-            <input name="Rating" type="number" min="1" max="5" class="form-control" required />
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Comments</label>
-            <textarea name="Comments" class="form-control" rows="3"></textarea>
-        </div>
-        <div class="mb-3">
-            <label class="form-label fw-bold">Result</label>
-            <div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio"
-                           name="Result" value="Selected" required />
-                    <label class="form-check-label text-success fw-bold">Selected</label>
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-0 shadow-sm overflow-hidden">
+                <div class="card-header bg-white border-bottom py-4 px-4 px-md-5">
+                    <h3 class="mb-0 fw-bold">Submit Feedback</h3>
+                    <p class="mb-0 small text-muted">Provide your evaluation for this interview.</p>
                 </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio"
-                           name="Result" value="Rejected" />
-                    <label class="form-check-label text-danger fw-bold">Rejected</label>
+                <div class="card-body p-4 p-md-5">
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger small border-0 bg-danger bg-opacity-10 text-danger mb-4">@ViewBag.Error</div>
+                    }
+
+                    <form method="post" action="/Interview/SubmitFeedback?jobId=@ViewBag.JobId">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="ApplicationId" value="@ViewBag.ApplicationId" />
+                        <input type="hidden" name="InterviewId" value="@ViewBag.InterviewId" />
+                        <input type="hidden" name="InterviewerId" value="0" />
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-medium text-muted small text-uppercase">Interviewer Name</label>
+                            <input name="InterviewerName" class="form-control form-control-lg bg-light" required placeholder="Your name" />
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-medium text-muted small text-uppercase">Rating (1-5)</label>
+                            <input name="Rating" type="number" min="1" max="5" class="form-control form-control-lg bg-light" required placeholder="5" />
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-medium text-muted small text-uppercase">Comments</label>
+                            <textarea name="Comments" class="form-control bg-light" rows="4" placeholder="Detailed feedback about the candidate..."></textarea>
+                        </div>
+                        
+                        <div class="mb-5">
+                            <label class="form-label fw-medium text-muted small text-uppercase d-block mb-3">Overall Result</label>
+                            <div class="d-flex gap-4">
+                                <div class="form-check custom-radio">
+                                    <input class="form-check-input border-success" type="radio" name="Result" id="resultSelected" value="Selected" required />
+                                    <label class="form-check-label text-success fw-bold ps-1" for="resultSelected" style="cursor: pointer;">Selected</label>
+                                </div>
+                                <div class="form-check custom-radio">
+                                    <input class="form-check-input border-danger" type="radio" name="Result" id="resultRejected" value="Rejected" />
+                                    <label class="form-check-label text-danger fw-bold ps-1" for="resultRejected" style="cursor: pointer;">Rejected</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-3">
+                            <button type="submit" class="btn btn-primary btn-lg fw-bold">Submit Feedback</button>
+                            <a href="/Interview/Index?applicationId=@ViewBag.ApplicationId&jobId=@ViewBag.JobId" class="btn btn-light btn-lg text-muted fw-medium">Cancel</a>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-        <button type="submit" class="btn btn-success w-100">Submit Feedback</button>
-        <a href="/Interview/Index?applicationId=@ViewBag.ApplicationId&jobId=@ViewBag.JobId"
-           class="btn btn-secondary w-100 mt-2">Cancel</a>
-    </form>
+    </div>
 </div>
+
+<style>
+    .custom-radio .form-check-input {
+        width: 1.25em;
+        height: 1.25em;
+        cursor: pointer;
+    }
+    .custom-radio .form-check-input:checked[value="Selected"] {
+        background-color: #198754;
+        border-color: #198754;
+    }
+    .custom-radio .form-check-input:checked[value="Rejected"] {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+</style>
